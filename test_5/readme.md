@@ -7,3 +7,8 @@ SENetBlock是一个很通用的模块，结构其实非常容易实现，也易�
 
 可以看到，第二层卷积特征的这16个通道，对所有样本有一定规律，对不同种类型，也有相应的偏好。
 
+如何得到cbam_feature（通道权重）并作图？
+
+让def SeNetBlock(feature,reduction=4)返回两个值 return x，cbam_feature
+这样可以另搞一个 cbam_feature 模型 cbam_feature_model=model(input,output=cbam_feature )
+然后再组织好数据， 前向一次cbam_feature_out=cbam_feature_model（data)，得到cbam_feature_out后，再reshape为100x16的矩阵，然后用plt绘图
