@@ -54,7 +54,7 @@ x = tf.keras.layers.Conv2D(6, kernel_size=(5, 5), strides=(1, 1), activation='re
 x = tf.keras.layers.MaxPooling2D(2,strides=(2,2))(x)
 x = tf.keras.layers.Conv2D(16, kernel_size=(5, 5), strides=(1, 1), activation='relu', padding='valid')(x)
 x, cbam_feature = SeNetBlock(x) # SeNetBlock 对有16个卷积核的第二个卷积层进行加权操作
-x = x * cbam_feature
+x = tf.keras.layers.Multiply()([x, cbam_feature])
 x = tf.keras.layers.MaxPooling2D(2,strides=(2,2))(x)
 x = tf.keras.layers.Flatten()(x)
 x = tf.keras.layers.Dense(120, activation='relu')(x)
