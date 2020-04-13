@@ -54,7 +54,7 @@ x = tf.keras.layers.Conv2D(6, kernel_size=(5, 5), strides=(1, 1), activation='re
 x = tf.keras.layers.MaxPooling2D(2,strides=(2,2))(x)
 x = tf.keras.layers.Conv2D(16, kernel_size=(5, 5), strides=(1, 1), activation='relu', padding='valid')(x)
 x, cbam_feature = SeNetBlock(x) # SeNetBlock 对有16个卷积核的第二个卷积层进行加权操作
-x = x + cbam_feature
+x = x * cbam_feature
 x = tf.keras.layers.MaxPooling2D(2,strides=(2,2))(x)
 x = tf.keras.layers.Flatten()(x)
 x = tf.keras.layers.Dense(120, activation='relu')(x)
@@ -80,21 +80,13 @@ cp_callback = tf.keras.callbacks.ModelCheckpoint(checkpoint_path,verbose=1, peri
 model.fit(x_train, y_train, batch_size=100, epochs=10, validation_data=(x_test, y_test), callbacks=[tensorboard_callback, cp_callback])
 # tensorboard --logdir=fit_logs
 
-model = tf.keras.models.load_model(checkpoint_path)
+#model = tf.keras.models.load_model(checkpoint_path)
 
-cbam_feature_model = tf.keras.Model(inputs=model.input, outputs=model.get_layer('cbam').output, name='cbam_feature') 
-cbam_feature_model1 = tf.keras.Model(inputs=inputs, outputs=cbam_feature)
+cbam_feature_model = tf.keras.Model(inputs=inputs, outputs=cbam_feature, name='cbam_feature') 
 cbam_feature_out = cbam_feature_model.predict(image_d)  # out [?,1,1,16]
-cbam_feature_out1 = cbam_feature_model1.predict(image_d)
 
 num = cbam_feature_out.reshape((100, -1)) # 100*16
-num1= cbam_feature_out1.reshape((100, -1)) # 100*16
-print((num==num1).all())
 num = num * 255.
 plt.imshow(num, cmap=plt.get_cmap('hot'))  
 plt.title('cbam_feature_out')
-plt.show()
-num1 = num1 * 255.
-plt.imshow(num1, cmap=plt.get_cmap('hot'))  
-plt.title('cbam_feature_out1')
 plt.show()
