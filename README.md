@@ -5,6 +5,7 @@
 3. 设计变量共享网络进行MNIST分类
 4. 连体网络MINIST优化
 5. SEblock Lenet 分类
+6. 深度学习可视化
 
 ## reference
 > 部分辅助学习资料
