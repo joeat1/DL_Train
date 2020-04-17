@@ -19,3 +19,12 @@
 例如数字3的fc2特征图，由100个不同的数字3样本的fc2特征按行拼接组成。
 
 故一张fc2图的大小为：100（行）*84（列）。
+
+2.
+特征分布可视化
+
+使用tensorboard中的embedding projector工具，对lenet模型提取的数据特征进行可视化
+
+要求：
+
+对比mnist原始数据embedding和训练好的lenet的f2特征embedding效果，感受特征学习的效果。
