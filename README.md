@@ -6,6 +6,8 @@
 4. 连体网络MINIST优化
 5. SEblock Lenet 分类
 6. 深度学习可视化
+7. grad-cam
+8. 迁移学习
 
 ## reference
 > 部分辅助学习资料
