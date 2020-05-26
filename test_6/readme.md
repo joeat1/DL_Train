@@ -1,4 +1,8 @@
-在Lenet中，分别使用ReLU及sigmoid激活函数，观察不同情况下，Lenet学习MNIST分类时，参数的变化。
+# 问题描述
+通过可视化的方式，解释为什么lenet的训练效果较好
+
+# 要求
+1. 在Lenet中，分别使用ReLU及sigmoid激活函数，观察不同情况下，Lenet学习MNIST分类时，参数的变化。
 
 在最终训练好Lenet的情况下，观察分类操作前的最后一个全连接层fc2的84位特征输出向量，比较不同类型样本的fc2特征图。
 
@@ -12,9 +16,8 @@
 例如数字3的fc2特征图，由100个不同的数字3样本的fc2特征按行拼接组成。
 故一张fc2图的大小为：100（行）*84（列）。
 
-2.
-特征分布可视化
+2. 特征分布可视化
 使用tensorboard中的embedding projector工具，对lenet模型提取的数据特征进行可视化
-要求：
 对比mnist原始数据embedding和训练好的lenet的f2特征embedding效果，感受特征学习的效果。
+
 参考：https://github.com/efeiefei/tensorflow_documents_zh/blob/master/get_started/embedding_viz.md
