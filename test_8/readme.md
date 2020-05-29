@@ -10,6 +10,11 @@
 
 ## 定性分析
 
-+ block_16_project_BN 与 block_16_project 相比，训练结果更为平稳，过拟合问题
++ block_16_project_BN 与 block_16_project 相比，训练结果更为平稳，过拟合影响较轻；Batch normal 层 零均值化，归一化，去相关 对过拟合的效果有益处，
 + block_16_project_BN 比 block_15_project_BN 相比，训练效果较好
-+ 
+
+
+## 降低过拟合——正则化
++ 调整目标函数 使得难例得到重视
++ 参数正则化   网络在降低样本损失的同时，选择较小的参数权值
++ dropout层   消除节点相互依赖
