@@ -9,6 +9,7 @@ import random
 import pathlib
 import tensorflow as tf
 import matplotlib.pyplot as plt
+# from tensorflow.keras.utils import plot_model
 
 #os.environ["CUDA_VISIBLE_DEVICES"]="-1"
 AUTOTUNE = tf.data.experimental.AUTOTUNE
@@ -106,7 +107,7 @@ val_batches = val_batches.prefetch(buffer_size=AUTOTUNE)
 test_batches = test_batches.prefetch(buffer_size=AUTOTUNE)
 
 #做好数据集后，看看数据读取有没有什么问题，看看类型，关键点标签是否有错误，image是不是有问题
-'''
+
 for image_batch, label_dict in test_batches.take(1):
     imgs=image_batch.numpy()
 
@@ -123,7 +124,6 @@ for image_batch, label_dict in test_batches.take(1):
                 color = "r", style = "italic", weight = "light", verticalalignment='center', horizontalalignment='right',rotation=0) #给散点加标签
         plt.imshow(np.uint8(deprocess_image(imgs[i])))
         plt.show()
-'''
 
 IMG_SHAPE = (IMG_SIZE, IMG_SIZE, 3)
 mobile_net = tf.keras.applications.MobileNetV2(input_shape=IMG_SHAPE, include_top=False,weights=None)
@@ -136,19 +136,22 @@ mobile_net.trainable=False
 #一个简单的多任务迁移学习model构建例子，可以尝试分类、关键点标注效果，
 #但是效果不一定很好，考虑修改自己的模型结构，提升分类和关键点标注效果
 x=mobile_net.outputs[0]
-x=tf.keras.layers.GlobalAveragePooling2D()(x)
+x=tf.keras.layers.GlobalAveragePooling2D()(x) # GlobalAveragePooling2D层对图像分类效果较好
 x = tf.keras.layers.Dense(120, activation='relu', name='features')(x)
 
-#另起一支：注意，用get_layer取中间层的适合，是.output,后面没有[0]
-y=mobile_net.get_layer('Conv_1_bn').output #假设关键点标注效果是成功识别图片类别的一个重要原因需要寻找得到关键识别出各模式点的层后进行再次训练
-y=tf.keras.layers.GlobalAveragePooling2D()(y) #展开成一维数据
-y=tf.keras.layers.Dense(320, name='key_nodes')(y)
-y=tf.keras.layers.Dense(120, name='key_nodes_1')(y)
+y=mobile_net.get_layer('Conv1_relu').output # bn_Conv1 Conv1 相比而言使用batch normal的层后 数据训练效果较为平稳
+y=tf.keras.layers.Conv2D(16,kernel_size=(5,5),strides=(1,1),activation='relu',padding='valid')(y)
+y=tf.keras.layers.MaxPooling2D(2,strides=(2,2))(y)
+y=tf.keras.layers.Flatten()(y) # 将数据平铺层一维
+y=tf.keras.layers.Dense(120,activation='relu')(y)
+y=tf.keras.layers.Dense(84,activation='relu')(y)
 
 c_pred=tf.keras.layers.Dense(3, activation = 'softmax', name='c_pred')(x)
 lm_pred=tf.keras.layers.Dense(14, name='lm_pred')(y)
 mt_model=tf.keras.Model(inputs=mobile_net.inputs, outputs=[c_pred,lm_pred], name='mt_model')
 mt_model.summary()
+
+# plot_model(mt_model,to_file='./model.jpg',show_shapes=True,expand_nested=True)
 
 #TODO 2:完成多任务的model compile
 initial_learning_rate = 0.001
