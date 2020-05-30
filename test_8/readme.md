@@ -10,9 +10,9 @@
 
 ## 定性分析
 
-+ block_16_project_BN 与 block_16_project 相比，训练结果更为平稳，过拟合影响较轻；Batch normal 层 零均值化，归一化，去相关 对过拟合的效果有益处，
-+ block_16_project_BN 比 block_15_project_BN 相比，训练效果较好
-
++ BatchNormal 层 实现 零均值化，归一化，去相关 对过拟合的效果有益处，添加 BatchNormal 层与不添加相比，训练结果更为平稳，过拟合影响较轻；
++ GlobalAveragePooling2D 层对图像分类工作的效果较好
++ 在迁移学习中，自定义附加的全连接层，建议选定激活函数，否则训练效果一般
 
 ## 降低过拟合——正则化
 + 调整目标函数 使得难例得到重视
