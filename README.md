@@ -12,3 +12,7 @@
 
 ## reference
 > 部分辅助学习资料
+
++ TensorFlow2深度学习.pdf
++ Reinforcement_Learning.md
++ transfer_learning.md
