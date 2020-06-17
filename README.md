@@ -11,7 +11,7 @@
 9. 分布式训练
 
 ## reference
-> 部分辅助学习资料
+> 部分辅助学习资料与笔记
 
 + TensorFlow2深度学习.pdf
 + Reinforcement_Learning.md
